@@ -108,9 +108,18 @@ class _reportState extends State<report> {
                     PricePoint(1.0, 74.33),
                     PricePoint(2.0, 74.2)
                   ]),
+                  Text(
+                      "In the mornings you appear to have a slower reaction time, try a morning routine with fruits and lots of water!"),
                   Center(
-                      child: Text('Here\'s some suggestions for you',
+                      child: Text(
+                          'Here\'s some AI generated suggestions for you!',
                           textScaleFactor: 2)),
+                  Text(
+                      "Aim for 7-8 hours of sleep to feel energetic and focused."),
+                  Text(
+                      "On less sleep, you tend to feel tired; prioritize rest for better days."),
+                  Text(
+                      "Higher attention and mood noted with good sleep; make it a habit!"),
                 ])))));
   }
 }

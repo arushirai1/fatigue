@@ -4,6 +4,8 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test_application/my_flutter_app_icons.dart';
+import 'clickable_icon.dart';
+import 'main.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: camel_case_types
@@ -24,43 +26,83 @@ class _assessmentState extends State<assessment> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-
-            const Text( // energy levels
+            const Text(
+              // energy levels
               'Select your energy level:',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            buildScrollableRowOfIcons( 
-              ['Exhausted', 'Tired', '   OK   ', 'Energetic', 'Fully Energized'],
-              [MyFlutterApp.exhausted, MyFlutterApp.tired, MyFlutterApp.ok, 
-              MyFlutterApp.energy, MyFlutterApp.fully],
+            buildScrollableRowOfIcons(
+              [
+                'Exhausted',
+                'Tired',
+                '   OK   ',
+                'Energetic',
+                'Fully Energized'
+              ],
+              [
+                MyFlutterApp.exhausted,
+                MyFlutterApp.tired,
+                MyFlutterApp.ok,
+                MyFlutterApp.energy,
+                MyFlutterApp.fully
+              ],
             ),
 
-             const Text( // physival symptoms
+            const Text(
+              // physival symptoms
               '\nSelect your physical sympyoms:',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             buildScrollableRowOfIcons(
               ['Headache', 'Muscle Ache', 'Gastro', 'None'],
-              [MyFlutterApp.tired, MyFlutterApp.ache, 
-              MyFlutterApp.gastro, MyFlutterApp.no],
+              [
+                MyFlutterApp.tired,
+                MyFlutterApp.ache,
+                MyFlutterApp.gastro,
+                MyFlutterApp.no
+              ],
             ),
 
-             const Text( // mental and emotional state (17 choices)
+            const Text(
+              // mental and emotional state (17 choices)
               '\nSelect your mental and emotional state:',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             buildScrollableRowOfIcons(
-              ['Mood Swings', ' Happy ', '  Sad  ', 
-              ' Angry ', 'Excited', 'Anxious', 'Indifferent', 
-              'Forgetful', ' Calm ', 'Stressed', 'Distracted', 
-              'Motivated', 'Unmotivated'],
-              [MyFlutterApp.mood, MyFlutterApp.happy, MyFlutterApp.sad,
-               MyFlutterApp.angry, MyFlutterApp.excited, MyFlutterApp.anxious, 
-               MyFlutterApp.indifferent, MyFlutterApp.forget, MyFlutterApp.calm, MyFlutterApp.stress,
-               MyFlutterApp.distracted, MyFlutterApp.motivated, MyFlutterApp.unmotivated],
+              [
+                'Mood Swings',
+                ' Happy ',
+                '  Sad  ',
+                ' Angry ',
+                'Excited',
+                'Anxious',
+                'Indifferent',
+                'Forgetful',
+                ' Calm ',
+                'Stressed',
+                'Distracted',
+                'Motivated',
+                'Unmotivated'
+              ],
+              [
+                MyFlutterApp.mood,
+                MyFlutterApp.happy,
+                MyFlutterApp.sad,
+                MyFlutterApp.angry,
+                MyFlutterApp.excited,
+                MyFlutterApp.anxious,
+                MyFlutterApp.indifferent,
+                MyFlutterApp.forget,
+                MyFlutterApp.calm,
+                MyFlutterApp.stress,
+                MyFlutterApp.distracted,
+                MyFlutterApp.motivated,
+                MyFlutterApp.unmotivated
+              ],
             ),
 
-             const Text( //sleep quality
+            const Text(
+              //sleep quality
               '\nDid you face insomnia, frequent awakenings, or restless sleep?',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
@@ -93,29 +135,48 @@ class _assessmentState extends State<assessment> {
               child: const Text('Enter the end time of your shift'),
             ),
 
-           const SizedBox(height: 20.0), // enter user text
+            const SizedBox(height: 20.0), // enter user text
             ElevatedButton(
               onPressed: () {
                 _showInputDialog(context);
               },
-              child: const Text('Enter anything else you would like to document'),
+              child:
+                  const Text('Enter anything else you would like to document'),
             ),
 
             const SizedBox(height: 20.0), //submit button
             ElevatedButton(
               onPressed: () {
                 _printUserSelections();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Thanks for submitting! We got: ' +
+                        userSelections.toString()),
+                    duration: Duration(
+                        seconds: 1), // Duration of the SnackBar display
+                  ),
+                );
+                Future.delayed(Duration(seconds: 5), () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyHomePage(
+                            title:
+                                'Yawn-Alytics: Your Fatigue Tracker')), // Replace with your landing page widget
+                    (Route<dynamic> route) =>
+                        false, // This removes all the routes except for the new LandingPage route
+                  );
+                });
               },
               child: const Text('Submit'),
             ),
-    
           ],
         ),
       ),
     );
   }
 
-    Widget buildScrollableRowOfIcons(List<String> labels, List<IconData> icons) {
+  Widget buildScrollableRowOfIcons(List<String> labels, List<IconData> icons) {
     assert(labels.length == icons.length);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -123,43 +184,44 @@ class _assessmentState extends State<assessment> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(
           labels.length,
-          (index) => buildClickableIcon(labels[index], icons[index], () {
-            // print('${labels[index]} clicked');
-            // Store the selection when an icon is clicked
-            userSelections[labels[index]] = 'Selected';
-            setState(() {}); // Update the UI
-          }),
+          (index) => ClickableIconWidget(
+              label: labels[index],
+              icon: icons[index],
+              onTap: () {
+                // print('${labels[index]} clicked');
+                // Store the selection when an icon is clicked
+                userSelections[labels[index]] = 'Selected';
+                setState(() {}); // Update the UI
+              }),
         ),
       ),
     );
   }
 
-Widget buildClickableIcon(String label, IconData icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: 40.0,
-              color: Colors.blue,
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 16.0),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+// Widget buildClickableIcon(String label, IconData icon, VoidCallback onTap) {
+//     return InkWell(
+//       onTap: onTap,
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//         child: Column(
+//           children: [
+//             Icon(
+//               icon,
+//               size: 40.0,
+//               color: Colors.blue,
+//             ),
+//             const SizedBox(height: 8.0),
+//             Text(
+//               label,
+//               style: const TextStyle(fontSize: 16.0),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-
-
- Future<void> _showIntegerInputDialog(BuildContext context) async {
+  Future<void> _showIntegerInputDialog(BuildContext context) async {
     TextEditingController _intTextController = TextEditingController();
 
     return showDialog(
@@ -195,12 +257,13 @@ Widget buildClickableIcon(String label, IconData icon, VoidCallback onTap) {
     );
   }
 
-DateTime updateDateTimeWithTimeOfDay(DateTime dateTime, TimeOfDay timeOfDay) {
-  // return Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDay.hour, timeOfDay.minute));
-  return DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDay.hour, timeOfDay.minute);
-}
+  DateTime updateDateTimeWithTimeOfDay(DateTime dateTime, TimeOfDay timeOfDay) {
+    // return Timestamp.fromDate(DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDay.hour, timeOfDay.minute));
+    return DateTime(dateTime.year, dateTime.month, dateTime.day, timeOfDay.hour,
+        timeOfDay.minute);
+  }
 
-Future<void> _showDateTimeDialog(BuildContext context) async {
+  Future<void> _showDateTimeDialog(BuildContext context) async {
     DateTime selectedDate = DateTime.now();
     TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -219,17 +282,18 @@ Future<void> _showDateTimeDialog(BuildContext context) async {
           if (pickedTime != null) {
             selectedTime = pickedTime;
 
-            userSelections['Date and Time Selected'] = updateDateTimeWithTimeOfDay(selectedDate, selectedTime); //'$selectedDate $selectedTime';
+            userSelections['Date and Time Selected'] =
+                updateDateTimeWithTimeOfDay(selectedDate,
+                    selectedTime); //'$selectedDate $selectedTime';
             // print(selectedTime);
-          //   print('Date and Time Selected: $selectedDate $selectedTime');
-         }
+            //   print('Date and Time Selected: $selectedDate $selectedTime');
+          }
         });
       }
     });
   }
 
-
- Future<void> _showInputDialog(BuildContext context) async {
+  Future<void> _showInputDialog(BuildContext context) async {
     TextEditingController _textController = TextEditingController();
 
     return showDialog(
@@ -252,8 +316,8 @@ Future<void> _showDateTimeDialog(BuildContext context) async {
               onPressed: () {
                 String enteredText = _textController.text;
                 // Store the entered text when the "OK" button is pressed
-              userSelections['Entered Text'] = enteredText;
-              setState(() {}); // Update the UI
+                userSelections['Entered Text'] = enteredText;
+                setState(() {}); // Update the UI
                 Navigator.of(context).pop();
               },
               child: const Text('OK'),
@@ -262,12 +326,26 @@ Future<void> _showDateTimeDialog(BuildContext context) async {
         );
       },
     );
-}
-
-   void _submitUserSelections() {
-    print('User Selections: $userSelections');
   }
- 
+
+  void _submitUserSelections() {
+    print('User Selections: $userSelections');
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) =>
+    //           MyHomePage(title: 'Yawn-Alytics: Your Fatigue Tracker')),
+    // );
+    // Navigator.pushAndRemoveUntil(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => MyHomePage(
+    //           title:
+    //               'Yawn-Alytics: Your Fatigue Tracker')), // Replace with your landing page widget
+    //   (Route<dynamic> route) =>
+    //       false, // This removes all the routes except for the new LandingPage route
+    // );
+  }
 
   void _printUserSelections() {
     print('User Selections:');
@@ -275,8 +353,4 @@ Future<void> _showDateTimeDialog(BuildContext context) async {
       print('$key: $value');
     });
   }
-
 }
-
-
-
