@@ -73,14 +73,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
-      body: Center(
-        child: Column(
+        appBar: AppBar(
+          title: Text('Yawn-Alytics: Your Fatigue Tracker'),
+        ),
+        body: Column(
           mainAxisSize: MainAxisSize.min, // To center the buttons vertically
           children: <Widget>[
-            ElevatedButton(
+            Image.asset('images/yawn-alytics.png'),
+            SizedBox(height: 20), // Spacing between the buttons
+            Center(
+                child: ElevatedButton(
               onPressed: () {
                 // Navigate to the assessment screen
                 Navigator.push(
@@ -89,9 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Text('Take Self Assessment'),
-            ),
+            )),
             SizedBox(height: 20), // Spacing between the buttons
-            ElevatedButton(
+            Center(
+                child: ElevatedButton(
               onPressed: () {
                 // Navigate to the information screen
                 Navigator.push(
@@ -100,10 +103,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Text('Get Report'),
-            ),
+            )),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }
