@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'assessment.dart'; // Import the new screen file
-
+import 'report.dart'; // Import the new screen file
 
 void main() {
   runApp(const MyApp());
@@ -70,24 +70,40 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Screen'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate to the new screen when the button is pressed
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => assessment()),
-            );
-          },
-          child: Text('Take Self Assessment'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // To center the buttons vertically
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the assessment screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => assessment()),
+                );
+              },
+              child: Text('Take Self Assessment'),
+            ),
+            SizedBox(height: 20), // Spacing between the buttons
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the information screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => report()),
+                );
+              },
+              child: Text('Get Report'),
+            ),
+          ],
         ),
       ),
     );
   }
- }
+}
